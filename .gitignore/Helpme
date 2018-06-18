@@ -1,0 +1,69 @@
+    if message.content.startswith(prefix  + 'comandos') or message.content.startswith(prefix + 'help'):
+        helpi = ('<:help:457441667184721943>')
+        manuali = ('<:manual:457442220975325186>')
+        musici = ('<:musicnotes:457443025929633804>')
+
+        helpuser = discord.Embed(title="Lista de comandos do {}".format(client.user.name),
+                        description=manuali+"Página 1",
+                        color=0x30abc0,
+                        timestamp=message.timestamp)
+        helpuser.add_field(name=helpi+'Comandos:',
+                           value='**{}report** <Msg> Reportar algum erro ou bug.\n'.format(prefix)+
+                                 '**{}roleta** Game roleta russa.\n'.format(prefix)+
+                                 '**{}dado** Game Dado.\n'.format(prefix)+
+                                 '**{}moeda** Game Cara ou coroa.\n'.format(prefix)+
+                                 '**{}eco** <Msg> Bota sua mensagem em um embed.\n'.format(prefix)+
+                                 '**{}diz** <Msg> O bot ira enviar a mensagem passada.\n'.format(prefix)+
+                                 '**{}votar** <Msg> Você ira iniciar uma votação.\n'.format(prefix)+
+                                 '**{}btc** Valor do BitCoin.\n'.format(prefix)+
+                                 '**{}usd** Valor do Dolar.\n'.format(prefix)+
+                                 '**{}noticias** Noticias atuais.\n'.format(prefix)+
+                                 '**{}cep** <Num> localizar de onde é o **cep** passado.\n'.format(prefix)+
+                                 '**{}clima** <Lugar> Clima na cidade passada.\n'.format(prefix)+
+                                 '**{}ip** <Num> Localizar de onde é o ip passado.\n'.format(prefix)+
+                                 '**{}calc** <Num> <+/-/*> <Num> ira fazer um calculo com o numero passado.\n'.format(prefix)+
+                                 '**{}cadastrar** Ira lhe cadastrar em nosso sistema.\n'.format(prefix), inline=False)
+        global bothelp
+        bothelp = await client.send_message(message.channel, embed=helpuser)
+        rea = await client.add_reaction(bothelp, "➡")
+        reax = message.server.get_member(client.user.id)
+
+        @client.event
+        async def on_reaction_add(reaction, user):
+            msg = reaction.message
+            chat = reaction.message.author
+            global testmsgid2
+            testmsgid2 = bothelp.id
+            global testmsguser2
+            testmsguser2 = message.author
+            global chatgroup
+            chatgroup = message.channel
+            if reaction.emoji == "➡" and msg.id == testmsgid2 and user == testmsguser2:
+                embedinfo = discord.Embed(name='Lista de comandos do {}'.format(client.user.name),
+                                          color=0x30abc0,
+                                          description=manuali+'Página 2',
+                                          timestamp=message.timestamp)
+                embedinfo.add_field(name=helpi+'Comandos:',
+                                          value='**{}avatar** <@Usuario> Pega o avatar do usuario.\n'.format(prefix)+
+                                                '**{}userinfo** <@Usuario> Informações do usuario solicitado.\n'.format(prefix)+
+                                                '**{}botinfo** Informações o bot.\n'.format(prefix)+
+                                                '**{}serverinfo** Informações do server.\n'.format(prefix)+
+                                                '**{}gcpf** Gera um cpf.\n'.format(prefix)+
+                                                '**{}gcnpj** Gera um cnpj.\n'.format(prefix)+
+                                                '**{}encurtador** <URL> encurta a url.\n'.format(prefix)+
+                                                '**{}proxy** <Num> ira lhe enviar proxys.\n'.format(prefix)+
+                                                '**{}traduzir** <Lang><Texto/Palavra> Traduz a palavra passada.\n'.format(prefix)+
+                                                '**{}ping** Informa o ping do bot.\n'.format(prefix)+
+                                                '**{}py** <Code> Deixa o **code** em um estado mais legível.\n'.format(prefix)+
+                                                '**{}js** <Code>Deixa o **code** em um estado mais legível.\n'.format(prefix))
+                embedinfo.add_field(name=musici+'Música(BETA):',
+                                    value='**{}tocar** <URL_YB> Começar a tocar a música.\n'.format(prefix)+
+                                          '**{}pausar** Pausar a música.\n'.format(prefix)+
+                                          '**{}resumo** Dar play na música depois de pausada.\n'.format(prefix)+
+                                          '**{}entrar** Entrar no canal.\n'.format(prefix)+
+                                          '**{}sair** Sair do canal.\n'.format(prefix))
+                global infodel
+                infodel = await client.edit_message(bothelp, embed=embedinfo)
+                reax = message.server.get_member(client.user.id)
+                await client.remove_reaction(msg, "➡", reax)
+                await client.add_reaction(infodel, '⬅')
